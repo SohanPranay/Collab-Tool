@@ -51,10 +51,12 @@ socket.on('receive_message', function(data) {
 let drawing = false;
 let lastX = 0, lastY = 0;
 let penColor = '#00fff7';
+let penSize = 3; 
 let tool = 'pen';
 const canvas = document.getElementById('annotationCanvas');
 const ctx = canvas.getContext('2d');
 const colorPicker = document.getElementById('penColor');
+const sizePicker = document.getElementById('penSize');  
 
 function setTool(selected) {
   tool = selected;
@@ -62,6 +64,10 @@ function setTool(selected) {
 
 colorPicker.addEventListener('input', function() {
   penColor = this.value;
+});
+
+sizePicker.addEventListener('input', function () {
+  penSize = parseInt(this.value);
 });
 
 canvas.addEventListener('mousedown', (e) => {
@@ -86,14 +92,14 @@ function draw(e) {
   if (!drawing) return;
   const [x, y] = getCanvasCoords(e);
   ctx.strokeStyle = penColor;
-  ctx.lineWidth = 3;
+  ctx.lineWidth = penSize;
   ctx.lineCap = 'round';
   ctx.beginPath();
   ctx.moveTo(lastX, lastY);
   ctx.lineTo(x, y);
   ctx.stroke();
   // Emit drawing data for real-time sync
-  socket.emit('draw', { from: [lastX, lastY], to: [x, y], color: penColor });
+  socket.emit('draw', { from: [lastX, lastY], to: [x, y], color: penColor, size:penSize });
   [lastX, lastY] = [x, y];
 }
 
@@ -119,7 +125,7 @@ function sendCanvas() {
 // Receive drawing from others
 socket.on('draw', function(data) {
   ctx.strokeStyle = data.color;
-  ctx.lineWidth = 3;
+  ctx.lineWidth = data.size || 3;
   ctx.lineCap = 'round';
   ctx.beginPath();
   ctx.moveTo(data.from[0], data.from[1]);

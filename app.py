@@ -25,4 +25,5 @@ def handle_clear_canvas():
     emit('clear_canvas', broadcast=True)
 
 if __name__ == '__main__':
+    print("Server is starting on http://localhost:5000") 
     socketio.run(app, host='0.0.0.0', port=5000)

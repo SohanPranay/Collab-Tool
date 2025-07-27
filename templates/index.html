@@ -37,6 +37,8 @@
           <div class="annotation-controls">
             <label for="penColor">Pen Color:</label>
             <input type="color" id="penColor" value="#00fff7">
+            <label for="penSize">Pen Size:</label>
+            <input type="range" id="penSize" min="1" max="10" value="3">
             <button onclick="setTool('pen')">Pen</button>
             <button onclick="clearCanvas()">Clear</button>
             <button onclick="sendCanvas()">Send to Chat</button>
