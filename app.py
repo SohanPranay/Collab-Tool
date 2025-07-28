@@ -6,7 +6,7 @@ from flask_socketio import SocketIO, emit
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
-socketio = SocketIO(app)
+socketio = SocketIO(app, async_mode='eventlet')  # eventlet mode required for Render
 
 @app.route('/')
 def index():
@@ -25,5 +25,6 @@ def handle_clear_canvas():
     emit('clear_canvas', broadcast=True)
 
 if __name__ == '__main__':
-    print("Server is starting on http://localhost:5000") 
-    socketio.run(app, host='0.0.0.0', port=5000)
+    # Local testing only
+    print("Server is starting on http://localhost:5000")
+    socketio.run(app, host='0.0.0.0', port=5000)  # Use 0.0.0.0 for external access in dev
